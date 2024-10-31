@@ -1,9 +1,12 @@
 # app.py
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from nltk.tokenize import word_tokenize, sent_tokenize
+import nltk
 
 app = Flask(__name__)
 CORS(app)
+nltk.download('punkt_tab')
 
 # Sample quiz data
 quizzes = [
@@ -61,6 +64,29 @@ def submit_quiz():
             score += 1
     
     return jsonify({"score": score})
+
+
+@app.route('/tokenize', methods=['POST'])
+def tokenize_text():
+    
+    corpus = request.get_json()
+    
+    text = corpus['text']
+    
+    try:
+        word_tokens = word_tokenize(text)
+        
+        response = {
+            'word_tokens': word_tokens,
+            'word_count': len(word_tokens),
+        }
+        
+        return jsonify(response)
+    
+    except Exception as e:
+        return jsonify({
+            'error': f'Error during tokenization: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
