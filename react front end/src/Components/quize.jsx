@@ -31,7 +31,7 @@ const QuizComponent = () => {
     setCurrentQuestion(0);
     setUserAnswers({});
     setQuizCompleted(false);
-    setScore(0);
+    setScore(1);
   };
 
   const handleAnswer = (answer) => {
